@@ -20,7 +20,7 @@ const NavLink = ({ href, children }) => {
 
             {/* subtle active indicator line */}
             {isActive && (
-                <span className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-[2px] bg-gray-500 rounded-full" />
+                <span className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-[2px] bg-[#e5383b] rounded-full" />
             )}
         </Link>
     );
