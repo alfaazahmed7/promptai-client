@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 
 const NavLink = ({ href, children }) => {
     const pathname = usePathname();
-    // Keeps the link active even if you are on a nested sub-route
-    const isActive = pathname === href || pathname?.startsWith(`${href}/`);
+    // Fixes the Home link trap: only check sub-routes if href isn't the root "/"
+    const isActive = pathname === href || (href !== "/" && pathname?.startsWith(`${href}/`));
 
     return (
         <Link
@@ -18,9 +18,9 @@ const NavLink = ({ href, children }) => {
         >
             {children}
 
-            {/* subtle active indicator line */}
+            {/* subtle active indicator line - adjusted to center perfectly below the text */}
             {isActive && (
-                <span className="absolute bottom-2 left-1/2 -translate-x-1/2 w-6 h-[2px] bg-[#e5383b] rounded-full" />
+                <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-[2px] bg-[#e5383b] rounded-full" />
             )}
         </Link>
     );
