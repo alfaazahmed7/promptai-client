@@ -75,7 +75,7 @@ const Banner = () => {
                     variants={itemVariants}
                     className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 text-xs sm:text-sm font-medium backdrop-blur-md"
                 >
-                    <FiCpu className="w-4 h-4" />
+                    <FiCpu className="w-4 h-4 animate-spin [animation-duration:4s]" />
                     <span>The Ultimate AI Prompt Marketplace</span>
                 </motion.div>
 
