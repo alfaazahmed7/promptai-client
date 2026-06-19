@@ -32,7 +32,7 @@ const Navbar = () => {
     const brand = { name: "Prompt", highlight: "AI", href: "/" };
     const centerLinks = [
         { name: "Home", href: "/" },
-        { name: "All Prompts", href: "/prompts" },
+        { name: "All Prompts", href: "/all-prompts" },
         { name: "Pricing", href: "/pricing" },
     ];
 
