@@ -2,78 +2,94 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import { FiCopy, FiArrowRight, FiUser,  } from 'react-icons/fi';
+import Image from 'next/image';
+import { FiCopy, FiArrowRight, FiUser } from 'react-icons/fi';
 import { AiFillCrown } from 'react-icons/ai';
 
 const PromptCard = ({ prompt }) => {
     const isPremium = prompt.tier === 'premium';
 
     return (
-        <div className={`group relative rounded-2xl bg-base-100 border p-6 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 ${isPremium
-                ? 'border-amber-500/20 hover:border-amber-500 hover:shadow-[0_0_25px_rgba(245,158,11,0.2)]'
-                : 'border-base-content/10 hover:border-primary/50 hover:shadow-[0_0_25px_rgba(59,130,246,0.15)]'
+        <div className={`group relative rounded-2xl bg-base-100 border flex flex-col justify-between overflow-hidden transition-all duration-300 shadow-sm ${isPremium
+            ? 'border-amber-500/30 hover:border-amber-500 hover:shadow-[0_0_25px_rgba(245,158,11,0.15)]'
+            : 'border-base-content/10 hover:border-primary/40 hover:shadow-[0_0_25px_rgba(59,130,246,0.12)]'
             }`}>
 
-            {/* Top Badge Information */}
-            <div>
-                <div className="flex flex-wrap justify-between items-center gap-2 mb-4">
-                    <div className="flex gap-2">
-                        <span className="badge badge-secondary badge-outline text-xs font-semibold py-2">
-                            {prompt.category}
-                        </span>
-                        <span className="badge badge-primary bg-primary/10 border-none text-primary text-xs font-medium py-2">
-                            {prompt.aiTool}
-                        </span>
-                    </div>
+            {/* Top Image Banner Section */}
+            <div className="relative w-full aspect-video overflow-hidden bg-base-300 dark:bg-neutral-800 border-b border-base-content/5">
+                <Image
+                    src={prompt.image || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"}
+                    alt={prompt.title || "Prompt Thumbnail"}
+                    fill
+                    sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
+                    priority={isPremium}
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
 
-                    {/* Dynamic Premium Tier Badge */}
-                    {isPremium && (
-                        <span className="badge bg-amber-500/10 border border-amber-500/30 text-amber-500 text-xs font-bold gap-1 py-2 animate-pulse">
-                            <AiFillCrown className="text-xs" />
-                            PREMIUM
-                        </span>
-                    )}
+                {/* Overlay Floating Badges */}
+                <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
+                    <span className="px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase rounded-md bg-slate-900/75 dark:bg-slate-900/90 text-amber-400 backdrop-blur-md shadow-sm border border-slate-700/30">
+                        {prompt.category}
+                    </span>
+                    <span className="px-2.5 py-1 text-[11px] font-semibold tracking-wide rounded-md bg-slate-900/75 dark:bg-slate-900/90 text-sky-400 backdrop-blur-md shadow-sm border border-slate-700/30">
+                        {prompt.aiTool}
+                    </span>
                 </div>
 
-                {/* Card Title */}
-                <h3 className={`text-xl font-bold tracking-tight transition-colors duration-200 line-clamp-1 ${isPremium ? 'text-base-content group-hover:text-amber-500' : 'text-base-content group-hover:text-[#3a86ff]'
-                    }`}>
-                    {prompt.title}
-                </h3>
-
-                {/* Sub Description */}
-                <p className="text-sm text-base-content/70 mt-2 line-clamp-2 min-h-[40px]">
-                    {prompt.fullDescription || "No description provided for this dynamic prompt design strategy."}
-                </p>
+                {/* Dynamic Premium Tier Badge Overlay */}
+                {isPremium && (
+                    <span className="absolute top-3 right-3 flex items-center gap-1 px-2.5 py-1 rounded-md bg-amber-500 text-slate-950 text-[10px] font-black tracking-wider shadow-md z-10 animate-pulse">
+                        <AiFillCrown className="text-xs" />
+                        PREMIUM
+                    </span>
+                )}
             </div>
 
-            {/* Bottom Row / Metric Utilities */}
-            <div className="mt-6 pt-4 border-t border-base-content/5 flex items-center justify-between">
-                {/* Creator Information */}
-                <div className="flex items-center gap-1.5 text-xs text-base-content/60 font-medium">
-                    <FiUser className="text-base text-base-content/40 shrink-0" />
-                    <span className="truncate max-w-[120px]">{prompt.creatorName}</span>
+            {/* Card Content Details */}
+            <div className="p-5 flex flex-col flex-1 justify-between bg-base-100 text-base-content">
+                <div>
+                    {/* Card Title */}
+                    <h3 className={`text-lg font-bold tracking-tight transition-colors duration-200 line-clamp-1 ${isPremium
+                        ? 'text-base-content dark:text-neutral-100 group-hover:text-amber-500 dark:group-hover:text-amber-400'
+                        : 'text-base-content dark:text-neutral-100 group-hover:text-primary dark:group-hover:text-primary-focus'
+                        }`}>
+                        {prompt.title}
+                    </h3>
+
+                    {/* Sub Description */}
+                    <p className="text-sm text-base-content/70 dark:text-base-content/80 mt-2 line-clamp-2 min-h-[40px] leading-relaxed">
+                        {prompt.fullDescription || "No description provided for this dynamic prompt design strategy."}
+                    </p>
                 </div>
 
-                {/* Action Metrics & Links */}
-                <div className="flex items-center gap-2">
-                    {/* Read-Only Copy Metric Badge */}
-                    <div className="flex items-center gap-1.5 text-xs font-medium px-2.5 py-1.5 rounded-lg border border-base-content/10 bg-base-200/50 text-base-content/70">
-                        <FiCopy className="text-sm text-base-content/40" />
-                        <span>{prompt.copyCount || 0}</span>
+                {/* Bottom Row / Metric Utilities */}
+                <div className="mt-5 pt-4 border-t border-base-content/10 dark:border-base-300 flex items-center justify-between">
+                    {/* Creator Information */}
+                    <div className="flex items-center gap-1.5 text-xs text-base-content/60 dark:text-base-content/70 font-medium">
+                        <FiUser className="text-base text-base-content/40 shrink-0" />
+                        <span className="truncate max-w-[110px]">{prompt.creatorName}</span>
                     </div>
 
-                    {/* View Details Target Link */}
-                    <Link
-                        href={`/all-prompts/${prompt._id || 'details'}`}
-                        className={`btn btn-sm gap-1 group-hover:gap-2 transition-all duration-200 ${isPremium
-                                ? 'btn-warning bg-amber-500 hover:bg-amber-600 text-neutral border-none'
-                                : 'btn-primary'
-                            }`}
-                    >
-                        <span>Details</span>
-                        <FiArrowRight className="text-xs" />
-                    </Link>
+                    {/* Action Metrics & Links */}
+                    <div className="flex items-center gap-2">
+                        {/* Read-Only Copy Metric Badge */}
+                        <div className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-base-content/10 dark:border-base-300 bg-base-200/60 dark:bg-neutral-800 text-base-content/80">
+                            <FiCopy className="text-sm text-base-content/40 dark:text-base-content/50" />
+                            <span>{prompt.copyCount || 0}</span>
+                        </div>
+
+                        {/* View Details Target Link */}
+                        <Link
+                            href={`/all-prompts/${prompt._id || 'details'}`}
+                            className={`btn btn-sm text-xs gap-1 group-hover:gap-2 transition-all duration-200 border-none shadow-sm ${isPremium
+                                ? 'bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold'
+                                : 'btn-primary text-primary-content'
+                                }`}
+                        >
+                            <span>Details</span>
+                            <FiArrowRight className="text-xs" />
+                        </Link>
+                    </div>
                 </div>
             </div>
 
