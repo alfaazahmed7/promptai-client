@@ -1,8 +1,8 @@
+// 2. InteractionBar.jsx
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiBookmark, FiCopy, FiAlertTriangle, FiCheck } from 'react-icons/fi';
-import useRouter from 'next/navigation';
+import { FiBookmark, FiAlertTriangle } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { authClient } from '@/lib/auth-client';
 import { addBookmark } from '@/lib/actions/bookmark';
@@ -16,28 +16,43 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
     const userData = authClient.useSession();
     const user = userData.data?.user;
 
+    // --- INSTANT UI CROSS-COMPONENT LISTEN LOGIC ---
+    useEffect(() => {
+        const handleInstantIncrement = () => {
+            setCopyCount(prev => prev + 1);
+        };
+
+        window.addEventListener('prompt-copied', handleInstantIncrement);
+        return () => {
+            window.removeEventListener('prompt-copied', handleInstantIncrement);
+        };
+    }, []);
+
+    // Sync state if initialCopyCount changes from server actions
+    useEffect(() => {
+        setCopyCount(initialCopyCount);
+    }, [initialCopyCount]);
+
     const handleBookmark = async () => {
         if (!user?.email) {
             return toast.error('Please log in to save bookmarks');
         }
 
         try {
-            // Pseudo-API call implementation: await toggleBookmarkAPI(promptId);
             const newState = !isBookmarked;
             setIsBookmarked(newState);
             if (newState) {
                 toast.success('Prompt added to bookmarks successfully!');
-            }
-            else {
+            } else {
                 toast.success('Bookmark removed.');
             }
 
             const payload = {
                 userEmail: user?.email,
                 promptId: promptId,
-            }
+            };
 
-            const bookmark = addBookmark(payload);
+            await addBookmark(payload);
         }
         catch (err) {
             toast.error('An error occurred. Please try again.');
@@ -45,10 +60,13 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
     };
 
     const handleReportSubmit = (e) => {
+        if (!user?.email) {
+            return toast.error('Please log in to report');
+        }
+
         e.preventDefault();
         if (!reportReason) return toast.error('Please pick a valid reason');
 
-        // Pseudo-API call implementation: await submitReport(promptId, reportReason);
         toast.success('Report submitted. Our moderation team will review this soon.');
         setIsReporting(false);
     };
@@ -80,7 +98,6 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
                 </button>
             </div>
 
-            {/* DaisyUI reporting modal template */}
             {isReporting && (
                 <div className="modal modal-open backdrop-blur-sm">
                     <div className="modal-box bg-base-200 border border-base-content/10 rounded-2xl">

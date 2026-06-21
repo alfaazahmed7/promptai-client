@@ -1,9 +1,11 @@
+// 3. PromptComponentCard.jsx
 'use client';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FiCopy, FiCheck, FiLock } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { incrementCopyCount } from '@/lib/actions/copyCount';
 
 const PromptContentCard = ({ prompt, isLocked }) => {
     const [copied, setCopied] = useState(false);
@@ -15,8 +17,18 @@ const PromptContentCard = ({ prompt, isLocked }) => {
             await navigator.clipboard.writeText(prompt.promptContent);
             setCopied(true);
             toast.success('Prompt context copied to clipboard!');
+
+            // Fire a custom event to instantly notify the InteractionBar component
+            window.dispatchEvent(new Event('prompt-copied'));
             setTimeout(() => setCopied(false), 2000);
-        } catch (err) {
+
+            // Fire the database API mutation background promise tracking task
+            await incrementCopyCount(prompt._id);
+
+            // Soft-refresh the server component tracking cache silently
+            router.refresh();
+        }
+        catch (err) {
             toast.error('Failed to copy code structural data.');
         }
     };
@@ -25,11 +37,8 @@ const PromptContentCard = ({ prompt, isLocked }) => {
         <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            /* Added dynamic min-h-[320px] when locked to keep internal items from clipping */
-            className={`relative bg-neutral text-neutral-content rounded-2xl shadow-xl overflow-hidden border border-neutral-focus transition-all duration-300 ${isLocked ? 'min-h-[320px]' : ''
-                }`}
+            className={`relative bg-neutral text-neutral-content rounded-2xl shadow-xl overflow-hidden border border-neutral-focus transition-all duration-300 ${isLocked ? 'min-h-[320px]' : ''}`}
         >
-            {/* Syntax header action panel bar */}
             <div className="bg-neutral-focus px-5 py-3 flex items-center justify-between border-b border-base-content/10">
                 <span className="font-mono text-xs text-neutral-content/60 tracking-wide">PROMPT ENGINE TEMPLATE</span>
                 {!isLocked && (
@@ -43,20 +52,16 @@ const PromptContentCard = ({ prompt, isLocked }) => {
                 )}
             </div>
 
-            {/* Text Core Terminal Frame */}
             <div className={`p-6 font-mono text-sm leading-relaxed whitespace-pre-wrap select-none transition-all duration-500 ${isLocked ? 'blur-md max-h-48 overflow-hidden opacity-30 select-none' : ''}`}>
                 {prompt.promptContent}
             </div>
 
-            {/* Overlap Intercept dynamic layer if subscription logic fails check */}
             {isLocked && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-neutral/85 backdrop-blur-md px-6 py-4 text-center">
                     <div className="bg-secondary text-secondary-content p-3.5 rounded-full shadow-lg mb-3 animate-bounce shrink-0">
                         <FiLock size={24} />
                     </div>
-                    <h3 className="text-xl font-bold text-white mb-1.5 tracking-tight">
-                        Premium Developer Content Gated
-                    </h3>
+                    <h3 className="text-xl font-bold text-white mb-1.5 tracking-tight">Premium Developer Content Gated</h3>
                     <p className="text-xs sm:text-sm text-neutral-content/80 max-w-sm mb-5 leading-relaxed">
                         Unlock this execution framework along with full architectural guides by configuring a standard access pipeline.
                     </p>
