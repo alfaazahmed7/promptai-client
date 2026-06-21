@@ -1,4 +1,5 @@
 'use client';
+import { addReview } from '@/lib/actions/review';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { FiStar, FiLock, FiMessageSquare } from 'react-icons/fi';
@@ -6,22 +7,21 @@ import { FiStar, FiLock, FiMessageSquare } from 'react-icons/fi';
 const ReviewSystem = ({ promptId, reviews, isLocked, user }) => {
     const [rating, setRating] = useState(5);
     const [comment, setComment] = useState('');
-    const [localReviews, setLocalReviews] = useState(reviews);
 
-    const handleSubmitReview = (e) => {
+    const handleSubmitReview = async (e) => {
         e.preventDefault();
         if (!user) return toast.error('You must sign in to submit evaluations.');
         if (isLocked) return toast.error('Action Restricted.');
 
         const newReview = {
-            name: user.name || 'Anonymous User',
             email: user.email,
             rating: Number(rating),
-            date: new Date().toLocaleDateString(),
+            promptId: promptId,
             comment
         };
 
-        setLocalReviews([newReview, ...localReviews]);
+        await addReview(newReview);
+
         setComment('');
         toast.success('Review processing loop complete! Review recorded.');
     };
@@ -67,28 +67,6 @@ const ReviewSystem = ({ promptId, reviews, isLocked, user }) => {
                     </button>
                 </form>
             )}
-
-            {/* Historical list render element */}
-            <div className="space-y-4 max-h-72 overflow-y-auto pr-1">
-                {localReviews.length === 0 ? (
-                    <p className="text-xs text-center text-base-content/50 py-4">No validation metrics submitted yet.</p>
-                ) : (
-                    localReviews.map((rev, index) => (
-                        <div key={index} className="p-3 bg-base-300 rounded-xl border border-base-content/5 text-xs space-y-1">
-                            <div className="flex justify-between items-center">
-                                <span className="font-bold text-base-content/90">{rev.name}</span>
-                                <span className="text-[10px] opacity-50">{rev.date}</span>
-                            </div>
-                            <div className="flex text-orange-400 gap-0.5 my-1">
-                                {Array.from({ length: rev.rating }).map((_, i) => (
-                                    <FiStar key={i} className="fill-current" size={10} />
-                                ))}
-                            </div>
-                            <p className="text-base-content/70 italic leading-normal">{rev.comment}</p>
-                        </div>
-                    ))
-                )}
-            </div>
         </div>
     );
 };
