@@ -59,6 +59,7 @@ const PromptDetailsPage = async ({ params }) => {
                         <UsersReviews
                             reviews={reviewsData || []}
                             user={user}
+                            isLocked={isLocked}
                         />
                     </div>
 

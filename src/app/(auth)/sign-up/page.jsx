@@ -8,12 +8,14 @@ import toast from "react-hot-toast";
 import { redirect } from "next/navigation";
 
 const SignUp = () => {
-    // 1. Form Data State
+    // 1. Form Data State (Added role and plan)
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         photoURL: "",
         password: "",
+        role: "user", // Default option
+        plan: "free", // Initially free
     });
 
     // 2. Field Errors State
@@ -76,8 +78,10 @@ const SignUp = () => {
             const { data, error } = await authClient.signUp.email({
                 name: formData.name,
                 email: formData.email,
-                image: formData.photoURL, 
+                image: formData.photoURL,
                 password: formData.password,
+                role: formData.role,
+                plan: formData.plan,
             });
 
             if (data) {
@@ -87,7 +91,6 @@ const SignUp = () => {
             if (error) {
                 toast.error('Error signing up: ' + error.message);
             }
-            // console.log(data, error, 'de');
         }
     };
 
@@ -172,6 +175,34 @@ const SignUp = () => {
                             />
                         </div>
                         {errors.photoURL && <p className="text-xs text-red-400 mt-1.5 ml-1">{errors.photoURL}</p>}
+                    </div>
+
+                    {/* Account Type Radio Selector */}
+                    <div className="form-control w-full">
+                        <label className="label py-1">
+                            <span className="label-text text-slate-300 text-xs font-semibold uppercase tracking-wider">Account Type</span>
+                        </label>
+                        <div className="grid grid-cols-3 gap-3">
+                            {["user", "creator", "admin"].map((role) => (
+                                <label
+                                    key={role}
+                                    className={`flex flex-col items-center justify-center p-3 rounded-xl border text-center cursor-pointer transition-all ${formData.role === role
+                                            ? "bg-indigo-600/10 border-indigo-500 text-indigo-400 font-medium"
+                                            : "bg-white/5 border-slate-700/50 text-slate-400 hover:border-slate-600"
+                                        }`}
+                                >
+                                    <input
+                                        type="radio"
+                                        name="role"
+                                        value={role}
+                                        checked={formData.role === role}
+                                        onChange={handleChange}
+                                        className="sr-only" // Hides native radio UI while keeping it accessible
+                                    />
+                                    <span className="capitalize text-sm">{role}</span>
+                                </label>
+                            ))}
+                        </div>
                     </div>
 
                     {/* Password Input Field with Toggle Functionality */}

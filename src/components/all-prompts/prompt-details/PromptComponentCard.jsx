@@ -6,6 +6,7 @@ import { FiCopy, FiCheck, FiLock } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { incrementCopyCount } from '@/lib/actions/copyCount';
+import Link from 'next/link';
 
 const PromptContentCard = ({ prompt, isLocked }) => {
     const [copied, setCopied] = useState(false);
@@ -65,12 +66,12 @@ const PromptContentCard = ({ prompt, isLocked }) => {
                     <p className="text-xs sm:text-sm text-neutral-content/80 max-w-sm mb-5 leading-relaxed">
                         Unlock this execution framework along with full architectural guides by configuring a standard access pipeline.
                     </p>
-                    <button
-                        onClick={() => router.push('/checkout/premium')}
+                    <Link
+                        href={'/pricing'}
                         className="btn btn-secondary btn-md sm:btn-md px-8 shadow-xl rounded-xl font-bold transition-transform hover:scale-105 active:scale-95 shrink-0"
                     >
                         Subscribe to Premium
-                    </button>
+                    </Link>
                 </div>
             )}
         </motion.div>
