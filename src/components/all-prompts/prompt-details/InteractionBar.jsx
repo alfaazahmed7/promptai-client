@@ -6,17 +6,19 @@ import { FiBookmark, FiAlertTriangle } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { authClient } from '@/lib/auth-client';
 import { addBookmark } from '@/lib/actions/bookmark';
+import { addReport } from '@/lib/actions/report';
 
 const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocked }) => {
     const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
     const [copyCount, setCopyCount] = useState(initialCopyCount);
     const [isReporting, setIsReporting] = useState(false);
     const [reportReason, setReportReason] = useState('');
+    const [reportDescription, setReportDescription] = useState('');
 
     const userData = authClient.useSession();
     const user = userData.data?.user;
 
-    // --- INSTANT UI CROSS-COMPONENT LISTEN LOGIC ---
+    // Instant UI cross-component listen logic
     useEffect(() => {
         const handleInstantIncrement = () => {
             setCopyCount(prev => prev + 1);
@@ -46,12 +48,10 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
             } else {
                 toast.success('Bookmark removed.');
             }
-
             const payload = {
                 userEmail: user?.email,
                 promptId: promptId,
             };
-
             await addBookmark(payload);
         }
         catch (err) {
@@ -59,16 +59,36 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
         }
     };
 
-    const handleReportSubmit = (e) => {
+    const handleReportSubmit = async (e) => {
+        e.preventDefault();
+
         if (!user?.email) {
             return toast.error('Please log in to report');
         }
 
-        e.preventDefault();
-        if (!reportReason) return toast.error('Please pick a valid reason');
+        if (!reportReason) {
+            return toast.error('Please pick a valid reason');
+        }
 
-        toast.success('Report submitted. Our moderation team will review this soon.');
-        setIsReporting(false);
+        try {
+            const payload = {
+                userEmail: user.email,
+                promptId: promptId,
+                reason: reportReason,
+                description: reportDescription,
+            };
+
+            await addReport(payload);
+            toast.success('Report submitted. Our moderation team will review this soon.');
+
+            // Reset state variables upon completion
+            setIsReporting(false);
+            setReportReason('');
+            setReportDescription('');
+        }
+        catch (err) {
+            toast.error('Failed to submit report. Please try again.');
+        }
     };
 
     return (
@@ -99,18 +119,20 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
             </div>
 
             {isReporting && (
-                <div className="modal modal-open backdrop-blur-sm">
-                    <div className="modal-box bg-base-200 border border-base-content/10 rounded-2xl">
+                <div className="modal modal-open backdrop-blur-sm z-50">
+                    <div className="modal-box bg-base-200 border border-base-content/10 rounded-2xl max-w-md text-base-content">
                         <h3 className="font-extrabold text-lg flex items-center gap-2 text-error">
-                            <FiAlertTriangle /> Report Material Block
+                            <FiAlertTriangle /> Report Prompt
                         </h3>
+
                         <form onSubmit={handleReportSubmit} className="space-y-4 mt-4">
+                            {/* Reason Selection */}
                             <div className="form-control">
-                                <label className="label font-semibold text-sm">Reason for flag</label>
+                                <label className="label font-semibold text-sm pb-1">Reason for flag</label>
                                 <select
                                     value={reportReason}
                                     onChange={(e) => setReportReason(e.target.value)}
-                                    className="select select-bordered w-full rounded-xl"
+                                    className="select select-bordered w-full rounded-xl bg-base-100 text-base-content"
                                     required
                                 >
                                     <option value="">Select a critical reason</option>
@@ -119,9 +141,38 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
                                     <option value="Copyright Violation">Copyright or Intellectual property theft</option>
                                 </select>
                             </div>
-                            <div className="modal-action">
-                                <button type="button" onClick={() => setIsReporting(false)} className="btn btn-ghost rounded-xl">Cancel</button>
-                                <button type="submit" className="btn btn-error rounded-xl">Submit Violation File</button>
+
+                            {/* Optional Description Field */}
+                            <div className="form-control">
+                                <label className="label font-semibold text-sm pb-1">
+                                    <span>Additional Description</span>
+                                    <span className="text-xs text-base-content/40 font-normal">Optional</span>
+                                </label>
+                                <textarea
+                                    value={reportDescription}
+                                    onChange={(e) => setReportDescription(e.target.value)}
+                                    placeholder="Provide details about why this prompt violates guidelines..."
+                                    className="textarea textarea-bordered w-full rounded-xl bg-base-100 min-h-[100px] text-base-content leading-relaxed"
+                                    maxLength={500}
+                                />
+                            </div>
+
+                            {/* Form Action Controls */}
+                            <div className="modal-action mt-6">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setIsReporting(false);
+                                        setReportReason('');
+                                        setReportDescription('');
+                                    }}
+                                    className="btn btn-ghost rounded-xl"
+                                >
+                                    Cancel
+                                </button>
+                                <button type="submit" className="btn btn-error rounded-xl font-bold px-6">
+                                    Submit Report
+                                </button>
                             </div>
                         </form>
                     </div>
