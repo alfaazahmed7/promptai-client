@@ -34,7 +34,7 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobi
     ];
 
     const creatorNavlinks = [
-        { name: 'Overview', href: '/dashboard/creator/analytics', icon: CiViewTimeline },
+        { name: 'Analytics', href: '/dashboard/creator/analytics', icon: CiViewTimeline },
         { name: 'Add Prompt', href: '/dashboard/creator/add-prompt', icon: FiPlusCircle },
         { name: 'My Prompts', href: '/dashboard/creator/my-prompts', icon: FiGrid },
     ];
@@ -148,7 +148,9 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobi
                         </div>
                         <div className={`flex-1 min-w-0 ${isCollapsed ? 'lg:hidden' : ''}`}>
                             <h4 className="text-sm font-semibold text-slate-200 truncate leading-tight">{user?.name}</h4>
-                            <p className="text-xs text-slate-500 truncate">{user?.role} Account</p>
+                            <p className="text-xs text-slate-500 truncate">
+                                {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)} Account
+                            </p>
                         </div>
                     </div>
                 </div>
