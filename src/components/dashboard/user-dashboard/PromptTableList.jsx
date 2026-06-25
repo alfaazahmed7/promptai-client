@@ -1,14 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
-import { FiEdit2, FiTrash2, FiBarChart2, FiLayers } from 'react-icons/fi';
 import UserAnalyticsModal from '@/components/dashboard/user-dashboard/UserAnalyticsModal';
-import UserEditModal from './UserEditModal';
 import { userModalEditData } from '@/lib/actions/userEditModal';
-import toast from 'react-hot-toast';
+import { DeletePromptById } from '@/lib/actions/userModalDelete';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { FiBarChart2, FiEdit2, FiLayers, FiTrash2 } from 'react-icons/fi';
 import UserDeleteModal from './UserDeleteModal';
-import { UserModalDelete } from '@/lib/actions/userModalDelete';
+import UserEditModal from './UserEditModal';
 
 const PromptTableList = ({ userPromptsData = [] }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -54,7 +54,7 @@ const PromptTableList = ({ userPromptsData = [] }) => {
     const handleConfirmDeleteData = async (confirmedPrompt) => {
         console.log("SENDING TARGET ID TO API WRAPPER:", confirmedPrompt._id);
 
-        const res = await UserModalDelete(deletingPrompt._id);
+        const res = await DeletePromptById(deletingPrompt._id);
         if (res.deletedCount > 0) {
             router.refresh();
             toast.success('Prompt deleted successfully');
