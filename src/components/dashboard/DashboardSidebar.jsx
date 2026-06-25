@@ -27,16 +27,16 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobi
     const userNavlinks = [
         { name: 'Overview', href: '/dashboard/user', icon: CiViewTimeline },
         { name: 'Add Prompt', href: '/dashboard/user/add-prompt', icon: FiPlusCircle },
-        { name: 'My Prompts', href: '/dashboard/user/my-prompt', icon: FiGrid },
+        { name: 'My Prompts', href: '/dashboard/user/my-prompts', icon: FiGrid },
         { name: 'Saved Prompts', href: '/dashboard/user/saved-prompts', icon: FiBookmark },
         { name: 'My Reviews', href: '/dashboard/user/my-reviews', icon: FiStar },
         { name: 'Profile', href: '/dashboard/user/profile', icon: FiUser },
     ];
 
     const creatorNavlinks = [
-        { name: 'Overview', href: '/dashboard/creator', icon: CiViewTimeline },
+        { name: 'Overview', href: '/dashboard/creator/analytics', icon: CiViewTimeline },
         { name: 'Add Prompt', href: '/dashboard/creator/add-prompt', icon: FiPlusCircle },
-        { name: 'My Prompts', href: '/dashboard/creator/my-prompt', icon: FiGrid },
+        { name: 'My Prompts', href: '/dashboard/creator/my-prompts', icon: FiGrid },
     ];
 
     const adminNavlinks = [

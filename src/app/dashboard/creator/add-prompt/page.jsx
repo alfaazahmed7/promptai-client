@@ -36,9 +36,9 @@ const AddPromptPage = () => {
         fetchPrompts();
     }, [user?.email]);
 
-    const userAddedPromptsCount = prompts.length;
+    const userAddedPromptsCount = prompts?.length;
+    console.log(userAddedPromptsCount, 'userAddedPromptsCount');
 
-    // const userAddedPromptsCount = 0;
     const isLimitReached =
         user?.plan === "free" && userAddedPromptsCount >= 3;
 
@@ -122,6 +122,7 @@ const AddPromptPage = () => {
                 copyCount: 0,
                 userEmail: user?.email,
                 userId: user?.id,
+                userRole: user?.role,
             };
 
             const res = await userAddPrompt(submissionData);
