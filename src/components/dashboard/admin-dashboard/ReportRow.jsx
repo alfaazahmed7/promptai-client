@@ -76,7 +76,7 @@ const ReportRow = ({ report, view }) => {
 
     // --- EMPTY BACKEND HANDLERS FOR YOUR CUSTOM INTEGRATION ---
     const handleDismissReport = () => {
-        console.log(`Report ID "${report._id?.$oid}" Dismissed backend logic trigger.`);
+        console.log(`Report ID "${report._id}" Dismissed backend logic trigger.`);
         closeModal();
     };
 

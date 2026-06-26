@@ -7,3 +7,7 @@ export const getReviewById = async (promptId) => {
 export const getReviewsByEmail = async (userEmail) => {
     return serverFetch(`/api/reviews/${userEmail}`);
 }
+
+export const getAllReviews = async () => {
+    return serverFetch('/api/get-all-reviews');
+}
