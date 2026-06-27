@@ -32,7 +32,7 @@ const PromptDetailsPage = async ({ params }) => {
     const reviewsData = await getReviewById(promptId);
 
     return (
-        <div className="min-h-screen bg-base-300 text-base-content pb-16 pt-[96px] px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-[#0b0f19] text-base-content pb-16 pt-[96px] px-4 sm:px-6 lg:px-8">
             <div className="max-w-5xl mx-auto space-y-8 pt-6">
 
                 {/* Meta Header */}

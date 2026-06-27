@@ -20,6 +20,7 @@ import {
 } from "react-icons/fi";
 import { authClient } from '@/lib/auth-client';
 import Image from 'next/image';
+import { SidebarLinksSkeleton } from '../shared/skeletons/SidebarLinksSkeleton';
 
 const DashboardSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOpen }) => {
     const pathname = usePathname();
@@ -51,13 +52,20 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobi
         user: userNavlinks,
         creator: creatorNavlinks,
         admin: adminNavlinks
-    }
+    };
 
-    const userData = authClient.useSession();
-    const user = userData.data?.user;
+    const { data: session, isPending } = authClient.useSession();
+    const user = session?.user;
 
-    const navItems = navLinkMap[user?.role || 'user'];
+    const navItems = user?.role ? navLinkMap[user.role] : [];
     const isActive = (href) => pathname === href;
+
+    const skeletonCount =
+        user?.role === 'admin'
+            ? adminNavlinks.length
+            : user?.role === 'creator'
+                ? creatorNavlinks.length
+                : userNavlinks.length;
 
     return (
         <>
@@ -71,8 +79,7 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobi
 
             <aside
                 className={`fixed inset-y-0 left-0 lg:sticky lg:top-0 h-screen border-r border-slate-800 bg-[#0f1422] text-slate-200 transition-all duration-300 ease-in-out z-50 flex flex-col justify-between ${isCollapsed ? 'lg:w-20' : 'lg:w-64'
-                    } w-64 ${isMobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'
-                    }`}
+                    } w-64 ${isMobileOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'}`}
             >
                 {/* Desktop Collapse Trigger Button */}
                 <button
@@ -100,58 +107,84 @@ const DashboardSidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobi
                             )}
 
                             {isCollapsed && (
-                                <span className="hidden lg:inline">
-                                    P
-                                </span>
+                                <span className="hidden lg:inline">P</span>
                             )}
                         </Link>
-                        <span className={`text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 ${isCollapsed ? 'lg:hidden' : ''}`}>
-                            {user?.role || 'User'}
-                        </span>
+
+                        {/* Role Badge Skeleton */}
+                        {isPending ? (
+                            <div className={`h-5 w-12 bg-slate-800 rounded-full animate-pulse ${isCollapsed ? 'lg:hidden' : ''}`} />
+                        ) : (
+                            <span className={`text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full bg-teal-500/10 text-teal-400 border border-teal-500/20 ${isCollapsed ? 'lg:hidden' : ''}`}>
+                                {user?.role || 'User'}
+                            </span>
+                        )}
                     </div>
 
-                    {/* Main Menu Links */}
-                    <ul className="px-3 py-6 space-y-1.5 list-none">
-                        {navItems.map((item) => {
-                            const Icon = item.icon;
-                            const active = isActive(item.href);
-                            return (
-                                <li key={item.name}>
-                                    <Link
-                                        href={item.href}
-                                        onClick={() => setIsMobileOpen(false)} // Closes screen-shade menu on select
-                                        className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-sm transition-all duration-150 group spatial-link ${active
-                                            ? 'bg-gradient-to-r from-teal-500/15 to-emerald-500/5 text-teal-400 border border-teal-500/20'
-                                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border border-transparent'
-                                            } ${isCollapsed ? 'lg:justify-center' : ''}`}
-                                        title={isCollapsed ? item.name : ''}
-                                    >
-                                        <Icon className={`text-lg shrink-0 ${active ? 'text-teal-400' : 'text-slate-400 group-hover:text-slate-300'}`} />
-                                        <span className={isCollapsed ? 'lg:hidden truncate' : 'truncate'}>{item.name}</span>
-                                    </Link>
-                                </li>
-                            );
-                        })}
-                    </ul>
+                    {/* Main Menu Links with Conditional Skeleton */}
+                    {isPending ? (
+                        <SidebarLinksSkeleton
+                            isCollapsed={isCollapsed}
+                            count={skeletonCount}
+                        />
+                    ) : (
+                        // Show regular menu once the user's role is confirmed
+                        <ul className="px-3 py-6 space-y-1.5 list-none">
+                            {navItems.map((item) => {
+                                const Icon = item.icon;
+                                const active = isActive(item.href);
+                                return (
+                                    <li key={item.name}>
+                                        <Link
+                                            href={item.href}
+                                            onClick={() => setIsMobileOpen(false)}
+                                            className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-medium text-sm transition-all duration-150 group spatial-link ${active
+                                                ? 'bg-gradient-to-r from-teal-500/15 to-emerald-500/5 text-teal-400 border border-teal-500/20'
+                                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40 border border-transparent'
+                                                } ${isCollapsed ? 'lg:justify-center' : ''}`}
+                                            title={isCollapsed ? item.name : ''}
+                                        >
+                                            <Icon className={`text-lg shrink-0 ${active ? 'text-teal-400' : 'text-slate-400 group-hover:text-slate-300'}`} />
+                                            <span className={isCollapsed ? 'lg:hidden truncate' : 'truncate'}>{item.name}</span>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    )}
                 </div>
 
                 {/* Bottom Profile Identity Section */}
                 <div className="p-3 border-t border-slate-800/60 bg-slate-900/30">
                     <div className={`flex items-center gap-3 px-2 py-1.5 rounded-xl border border-slate-800/40 bg-slate-900/50 ${isCollapsed ? 'lg:justify-center' : ''}`}>
-                        <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 relative">
-                            <Image
-                                src={user?.image}
-                                alt={user?.name || "User"}
-                                fill
-                                className="object-cover"
-                            />
-                        </div>
-                        <div className={`flex-1 min-w-0 ${isCollapsed ? 'lg:hidden' : ''}`}>
-                            <h4 className="text-sm font-semibold text-slate-200 truncate leading-tight">{user?.name}</h4>
-                            <p className="text-xs text-slate-500 truncate">
-                                {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)} Account
-                            </p>
-                        </div>
+                        {isPending ? (
+                            <>
+                                <div className="w-9 h-9 rounded-full bg-slate-800 shrink-0 animate-pulse" />
+                                <div className={`flex-1 space-y-2 ${isCollapsed ? 'lg:hidden' : ''}`}>
+                                    <div className="h-3 bg-slate-800 rounded w-3/4 animate-pulse" />
+                                    <div className={`h-2 bg-slate-800 rounded w-1/2 animate-pulse`} />
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="w-9 h-9 rounded-full overflow-hidden shrink-0 relative">
+                                    {user?.image && (
+                                        <Image
+                                            src={user.image}
+                                            alt={user.name || "User"}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    )}
+                                </div>
+                                <div className={`flex-1 min-w-0 ${isCollapsed ? 'lg:hidden' : ''}`}>
+                                    <h4 className="text-sm font-semibold text-slate-200 truncate leading-tight">{user?.name}</h4>
+                                    <p className="text-xs text-slate-500 truncate">
+                                        {user?.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'User'} Account
+                                    </p>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             </aside>

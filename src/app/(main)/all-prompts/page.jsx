@@ -17,7 +17,7 @@ const AllPromptsPage = async ({ searchParams }) => {
     }) || [];
 
     return (
-        <div className="min-h-screen bg-base-300 text-base-content pb-12 pt-[96px] px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-[#0b0f19] text-white pb-12 pt-[96px] px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto space-y-10 pt-12">
 
                 {/* Header Section */}
