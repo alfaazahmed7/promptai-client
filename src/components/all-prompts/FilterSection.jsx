@@ -22,70 +22,71 @@ const FilterSection = ({ currentFilters }) => {
         <div className="space-y-5">
             {/* Search Input */}
             <div className="form-control w-full">
-                <label className="label text-xs font-semibold uppercase tracking-wider text-base-content/60">Search Keywords</label>
+                <label className="label text-xs font-semibold uppercase tracking-wider text-gray-400">Search Keywords</label>
                 <div className="relative">
                     <input
                         type="text"
                         placeholder="Search titles, tags..."
                         defaultValue={currentFilters?.search || ''}
                         onChange={(e) => handleFilterChange('search', e.target.value)}
-                        className="input input-bordered w-full pl-10 focus:input-primary bg-base-100 transition-all text-sm"
+                        /* Fixed background color and text to stay dark */
+                        className="input input-bordered w-full pl-10 focus:border-primary bg-[#1a2333] border-gray-700 text-white transition-all text-sm outline-none placeholder-gray-500"
                     />
-                    <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
+                    <FiSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-lg" />
                 </div>
             </div>
 
             {/* Category Dropdown */}
             <div className="form-control w-full">
-                <label className="label text-xs font-semibold uppercase tracking-wider text-base-content/60">Category</label>
+                <label className="label text-xs font-semibold uppercase tracking-wider text-gray-400">Category</label>
                 <div className="relative">
                     <select
                         defaultValue={currentFilters?.category || ''}
                         onChange={(e) => handleFilterChange('category', e.target.value)}
-                        className="select select-bordered w-full pl-10 bg-base-100 text-sm focus:select-primary"
+                        className="select select-bordered w-full pl-10 bg-[#1a2333] border-gray-700 text-white text-sm focus:border-primary outline-none"
                     >
-                        <option value="">All Categories</option>
-                        <option value="Web Development">Web Development</option>
-                        <option value="AI Art">AI Art</option>
-                        <option value="Content Writing">Content Writing</option>
-                        <option value="Sales & Marketing">Sales & Marketing</option>
+                        <option value="" className="bg-[#1a2333] text-white">All Categories</option>
+                        <option value="Web Development" className="bg-[#1a2333] text-white">Web Development</option>
+                        <option value="AI Art" className="bg-[#1a2333] text-white">AI Art</option>
+                        <option value="Content Writing" className="bg-[#1a2333] text-white">Content Writing</option>
+                        <option value="Sales & Marketing" className="bg-[#1a2333] text-white">Sales & Marketing</option>
                     </select>
-                    <FiLayers className="absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
+                    <FiLayers className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-lg pointer-events-none" />
                 </div>
             </div>
 
             {/* AI Tool Dropdown */}
             <div className="form-control w-full">
-                <label className="label text-xs font-semibold uppercase tracking-wider text-base-content/60">AI Engine</label>
+                <label className="label text-xs font-semibold uppercase tracking-wider text-gray-400">AI Engine</label>
                 <div className="relative">
                     <select
                         defaultValue={currentFilters?.aiTool || ''}
                         onChange={(e) => handleFilterChange('aiTool', e.target.value)}
-                        className="select select-bordered w-full pl-10 bg-base-100 text-sm focus:select-primary"
+                        className="select select-bordered w-full pl-10 bg-[#1a2333] border-gray-700 text-white text-sm focus:border-primary outline-none"
                     >
-                        <option value="">All Tools</option>
-                        <option value="ChatGPT">ChatGPT</option>
-                        <option value="Claude AI">Claude AI</option>
-                        <option value="Midjourney">Midjourney</option>
+                        <option value="" className="bg-[#1a2333] text-white">All Tools</option>
+                        <option value="ChatGPT" className="bg-[#1a2333] text-white">ChatGPT</option>
+                        <option value="Claude AI" className="bg-[#1a2333] text-white">Claude AI</option>
+                        <option value="Midjourney" className="bg-[#1a2333] text-white">Midjourney</option>
                     </select>
-                    <FiCpu className="absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
+                    <FiCpu className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-lg pointer-events-none" />
                 </div>
             </div>
 
             {/* Sorting Dropdown */}
             <div className="form-control w-full">
-                <label className="label text-xs font-semibold uppercase tracking-wider text-base-content/60">Sort Order</label>
+                <label className="label text-xs font-semibold uppercase tracking-wider text-gray-400">Sort Order</label>
                 <div className="relative">
                     <select
                         defaultValue={currentFilters?.sort || 'latest'}
                         onChange={(e) => handleFilterChange('sort', e.target.value)}
-                        className="select select-bordered w-full pl-10 bg-base-100 text-sm focus:select-primary"
+                        className="select select-bordered w-full pl-10 bg-[#1a2333] border-gray-700 text-white text-sm focus:border-primary outline-none"
                     >
-                        <option value="latest">Newest Released</option>
-                        <option value="popular">Most Copied</option>
-                        <option value="alphabetical">Alphabetical (A-Z)</option>
+                        <option value="latest" className="bg-[#1a2333] text-white">Newest Released</option>
+                        <option value="popular" className="bg-[#1a2333] text-white">Most Copied</option>
+                        <option value="alphabetical" className="bg-[#1a2333] text-white">Alphabetical (A-Z)</option>
                     </select>
-                    <FiBarChart className="absolute left-3.5 top-1/2 -translate-y-1/2 text-base-content/40 text-lg" />
+                    <FiBarChart className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 text-lg pointer-events-none" />
                 </div>
             </div>
         </div>

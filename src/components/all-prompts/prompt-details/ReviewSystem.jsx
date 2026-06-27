@@ -45,15 +45,15 @@ const ReviewSystem = ({ promptId, reviews = [], isLocked, user }) => {
     };
 
     return (
-        <div className="bg-base-200 p-6 rounded-2xl border border-base-content/5 shadow-xl space-y-4 text-base-content">
+        <div className="bg-[#161f30] p-6 rounded-2xl border border-gray-700/40 shadow-xl space-y-4 text-white">
             <h3 className="font-bold text-lg flex items-center gap-2 text-primary">
                 <FiMessageSquare /> Feedback & Ratings
             </h3>
 
             {isLocked ? (
-                <div className="p-4 bg-base-300 rounded-xl text-center space-y-2 border border-dashed border-base-content/10">
-                    <FiLock className="mx-auto text-base-content/40" size={20} />
-                    <p className="text-xs text-base-content/60 font-medium">Review console locked for free tier accounts.</p>
+                <div className="p-4 bg-[#1a2333] rounded-xl text-center space-y-2 border border-dashed border-gray-700/50">
+                    <FiLock className="mx-auto text-gray-500" size={20} />
+                    <p className="text-xs text-gray-400 font-medium">Review console locked for free tier accounts.</p>
                 </div>
             ) : hasUserReviewed ? (
                 <div className="p-4 bg-success/10 text-success rounded-xl border border-success/20 flex items-center gap-3">
@@ -66,7 +66,7 @@ const ReviewSystem = ({ promptId, reviews = [], isLocked, user }) => {
             ) : (
                 <form onSubmit={handleSubmitReview} className="space-y-3">
                     <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold">Your Rating:</span>
+                        <span className="text-sm font-semibold text-gray-300">Your Rating:</span>
                         <div className="rating rating-sm gap-0.5">
                             {[1, 2, 3, 4, 5].map((star) => (
                                 <input
@@ -82,7 +82,7 @@ const ReviewSystem = ({ promptId, reviews = [], isLocked, user }) => {
                         </div>
                     </div>
                     <textarea
-                        className="textarea textarea-bordered w-full h-20 text-sm rounded-xl focus:textarea-primary bg-base-100 text-base-content"
+                        className="textarea textarea-bordered w-full h-20 text-sm rounded-xl focus:textarea-primary bg-[#1a2333] border-gray-700 text-white placeholder-gray-500 outline-none transition-all"
                         placeholder="Share your evaluation of this prompt's performance matrix..."
                         value={comment}
                         onChange={(e) => setComment(e.target.value)}

@@ -26,13 +26,12 @@ const PromptDetailsPage = async ({ params }) => {
     const isPremiumTier = prompt.tier === 'premium';
     const hasPremiumAccess = user?.plan === 'pro';
     const isLocked = isPremiumTier && !hasPremiumAccess;
-    // console.log(isLocked, 'isss');
 
     const bookmark = await getBookmarkByIdAndEmail(promptId, user?.email);
     const reviewsData = await getReviewById(promptId);
 
     return (
-        <div className="min-h-screen bg-[#0b0f19] text-base-content pb-16 pt-[96px] px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-[#121824] text-white pb-16 pt-[96px] px-4 sm:px-6 lg:px-8">
             <div className="max-w-5xl mx-auto space-y-8 pt-6">
 
                 {/* Meta Header */}
@@ -64,20 +63,22 @@ const PromptDetailsPage = async ({ params }) => {
 
                     {/* Right Column: Usage Rules & Reviews */}
                     <div className="lg:col-span-1 space-y-6">
-                        <div className="bg-base-200 p-6 rounded-2xl border border-base-content/5 shadow-xl">
+                        {/* FIXED CONTAINER: Replaced bg-base-200 with matching card layout color */}
+                        <div className="bg-[#161f30] p-6 rounded-2xl border border-gray-700/40 shadow-xl">
                             <h3 className="font-bold text-lg mb-3 text-secondary flex items-center gap-2">
                                 <span>Usage Instructions</span>
                             </h3>
 
                             {!isLocked ? (
-                                <p className="text-sm text-base-content/80 leading-relaxed whitespace-pre-wrap">
+                                <p className="text-sm text-gray-300 leading-relaxed whitespace-pre-wrap">
                                     {prompt.usageInstructions || "No explicit instructions provided."}
                                 </p>
                             ) : (
-                                <div className="flex items-center gap-3 p-3 bg-base-300/50 rounded-xl border border-base-content/5">
+                                /* FIXED LOCKED BANNER: Swapped dynamic colors for static variations */
+                                <div className="flex items-center gap-3 p-3 bg-[#1e293b] rounded-xl border border-gray-700/40">
                                     <span className="p-2 rounded-lg bg-amber-500/10 text-amber-500 text-sm">🔒</span>
-                                    <p className="text-xs text-base-content/70">
-                                        <span className="font-bold block text-base-content text-sm">Instructions Gated</span>
+                                    <p className="text-xs text-gray-400">
+                                        <span className="font-bold block text-white text-sm">Instructions Gated</span>
                                         Subscribe to premium to view the deployment strategy.
                                     </p>
                                 </div>

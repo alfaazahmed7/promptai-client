@@ -42,10 +42,8 @@ const Footer = () => {
     ];
 
     return (
-        <footer className="relative bg-[#1A2536] border-t border-[#23354e]/50 overflow-hidden pt-20 pb-10">
-            {/* Ambient Background Glow matching the blue-teal undertone of #1A2536 */}
-            <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-teal-500/10 rounded-full blur-[100px] pointer-events-none" />
-            <div className="absolute bottom-0 left-1/4 w-80 h-80 bg-sky-500/10 rounded-full blur-[100px] pointer-events-none" />
+        /* Changed background to deep premium dark #0B0F17 and adjusted borders */
+        <footer className="relative bg-[#0B0F17] border-t border-slate-900 overflow-hidden pt-20 pb-10">
 
             <div className="max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -65,14 +63,14 @@ const Footer = () => {
 
                         {/* Modern Newsletter Input */}
                         <div className="space-y-3 pt-2">
-                            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-300">
+                            <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
                                 Get Fresh Prompts Weekly
                             </h4>
-                            <form className="relative max-w-sm flex items-center bg-white/5 border border-slate-700/50 p-1 rounded-xl focus-within:border-indigo-500/60 transition-colors">
+                            <form className="relative max-w-sm flex items-center bg-white/[0.03] border border-slate-800 p-1 rounded-xl focus-within:border-indigo-500/60 transition-colors">
                                 <input
                                     type="email"
                                     placeholder="Enter your email"
-                                    className="w-full bg-transparent border-none outline-none text-white placeholder-slate-500 text-sm py-2 px-3 focus:ring-0"
+                                    className="w-full bg-transparent border-none outline-none text-white placeholder-slate-600 text-sm py-2 px-3 focus:ring-0"
                                     required
                                 />
                                 <button className="p-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white transition-colors">
@@ -146,7 +144,7 @@ const Footer = () => {
                     {/* Copyright & Signoff */}
                     <div className="text-xs text-slate-500 flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-center sm:text-left">
                         <span>&copy; {currentYear} PromptAI Corp. All rights reserved.</span>
-                        <span className="hidden sm:inline text-slate-700">|</span>
+                        <span className="hidden sm:inline text-slate-800">|</span>
                         <span className="flex items-center gap-1">
                             Built with <FiHeart className="text-[#e5383b] fill-[#e5383b] w-3 h-3" /> for AI Engineers.
                         </span>
@@ -161,7 +159,7 @@ const Footer = () => {
                                 aria-label={social.label}
                                 whileHover={{ y: -3, scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-800/30 hover:bg-indigo-600/10 text-slate-400 hover:text-indigo-400 border border-slate-800/60 hover:border-indigo-500/30 transition-colors duration-200"
+                                className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-900/50 hover:bg-indigo-600/10 text-slate-400 hover:text-indigo-400 border border-slate-800/80 hover:border-indigo-500/30 transition-colors duration-200"
                             >
                                 {social.icon}
                             </motion.a>

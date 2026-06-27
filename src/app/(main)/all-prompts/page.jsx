@@ -17,7 +17,7 @@ const AllPromptsPage = async ({ searchParams }) => {
     }) || [];
 
     return (
-        <div className="min-h-screen bg-[#0b0f19] text-white pb-12 pt-[96px] px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen bg-[#131926] text-white pb-12 pt-[96px] px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto space-y-10 pt-12">
 
                 {/* Header Section */}
@@ -31,8 +31,7 @@ const AllPromptsPage = async ({ searchParams }) => {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-                    {/* Filter Sidebar (Client Component for interactive inputs) */}
-                    <aside className="lg:col-span-1 bg-base-200 p-6 rounded-2xl border border-base-content/5 shadow-xl lg:sticky top-6">
+                    <aside className="lg:col-span-1 bg-[#161f30] p-6 rounded-2xl border border-gray-700/40 shadow-xl lg:sticky top-6">
                         <div className="flex items-center gap-2 font-bold text-lg mb-6 text-primary">
                             <FiSliders />
                             <span>Refine Prompts</span>
@@ -42,8 +41,8 @@ const AllPromptsPage = async ({ searchParams }) => {
 
                     {/* Prompts Display Area */}
                     <main className="lg:col-span-3 space-y-6">
-                        <div className="flex justify-between items-center bg-base-200 p-4 rounded-xl border border-base-content/5">
-                            <span className="text-sm font-medium text-base-content/70">
+                        <div className="flex justify-between items-center bg-[#161f30] p-4 rounded-xl border border-gray-700/40">
+                            <span className="text-sm font-medium text-gray-400">
                                 Showing <span className="text-secondary font-bold">{prompts.length}</span> amazing prompts
                             </span>
                         </div>

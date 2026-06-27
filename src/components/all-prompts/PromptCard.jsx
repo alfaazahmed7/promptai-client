@@ -10,13 +10,13 @@ const PromptCard = ({ prompt }) => {
     const isPremium = prompt.tier === 'premium';
 
     return (
-        <div className={`group relative rounded-2xl bg-base-100 border flex flex-col justify-between overflow-hidden transition-all duration-300 shadow-sm ${isPremium
+        <div className={`group relative rounded-2xl bg-[#161f30] flex flex-col justify-between overflow-hidden transition-all duration-300 shadow-sm border ${isPremium
             ? 'border-amber-500/30 hover:border-amber-500 hover:shadow-[0_0_25px_rgba(245,158,11,0.15)]'
-            : 'border-base-content/10 hover:border-primary/40 hover:shadow-[0_0_25px_rgba(59,130,246,0.12)]'
+            : 'border-gray-700/40 hover:border-primary/40 hover:shadow-[0_0_25px_rgba(59,130,246,0.12)]'
             }`}>
 
             {/* Top Image Banner Section */}
-            <div className="relative w-full aspect-video overflow-hidden bg-base-300 dark:bg-neutral-800 border-b border-base-content/5">
+            <div className="relative w-full aspect-video overflow-hidden bg-gray-800 border-b border-gray-700/30">
                 <Image
                     src={prompt.image || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"}
                     alt={prompt.title || "Prompt Thumbnail"}
@@ -28,10 +28,10 @@ const PromptCard = ({ prompt }) => {
 
                 {/* Overlay Floating Badges */}
                 <div className="absolute top-3 left-3 flex flex-wrap gap-1.5 z-10">
-                    <span className="px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase rounded-md bg-slate-900/75 dark:bg-slate-900/90 text-amber-400 backdrop-blur-md shadow-sm border border-slate-700/30">
+                    <span className="px-2.5 py-1 text-[11px] font-semibold tracking-wide uppercase rounded-md bg-slate-900/75 text-amber-400 backdrop-blur-md shadow-sm border border-slate-700/30">
                         {prompt.category}
                     </span>
-                    <span className="px-2.5 py-1 text-[11px] font-semibold tracking-wide rounded-md bg-slate-900/75 dark:bg-slate-900/90 text-sky-400 backdrop-blur-md shadow-sm border border-slate-700/30">
+                    <span className="px-2.5 py-1 text-[11px] font-semibold tracking-wide rounded-md bg-slate-900/75 text-sky-400 backdrop-blur-md shadow-sm border border-slate-700/30">
                         {prompt.aiTool}
                     </span>
                 </div>
@@ -46,35 +46,35 @@ const PromptCard = ({ prompt }) => {
             </div>
 
             {/* Card Content Details */}
-            <div className="p-5 flex flex-col flex-1 justify-between bg-base-100 text-base-content">
+            <div className="p-5 flex flex-col flex-1 justify-between bg-[#161f30] text-white">
                 <div>
                     {/* Card Title */}
                     <h3 className={`text-lg font-bold tracking-tight transition-colors duration-200 line-clamp-1 ${isPremium
-                        ? 'text-base-content dark:text-neutral-100 group-hover:text-amber-500 dark:group-hover:text-amber-400'
-                        : 'text-base-content dark:text-neutral-100 group-hover:text-primary dark:group-hover:text-primary-focus'
+                        ? 'text-white group-hover:text-amber-400'
+                        : 'text-white group-hover:text-primary'
                         }`}>
                         {prompt.title}
                     </h3>
 
                     {/* Sub Description */}
-                    <p className="text-sm text-base-content/70 dark:text-base-content/80 mt-2 line-clamp-2 min-h-[40px] leading-relaxed">
+                    <p className="text-sm text-gray-400 mt-2 line-clamp-2 min-h-[40px] leading-relaxed">
                         {prompt.fullDescription || "No description provided for this dynamic prompt design strategy."}
                     </p>
                 </div>
 
                 {/* Bottom Row / Metric Utilities */}
-                <div className="mt-5 pt-4 border-t border-base-content/10 dark:border-base-300 flex items-center justify-between">
+                <div className="mt-5 pt-4 border-t border-gray-700/40 flex items-center justify-between">
                     {/* Creator Information */}
-                    <div className="flex items-center gap-1.5 text-xs text-base-content/60 dark:text-base-content/70 font-medium">
-                        <FiUser className="text-base text-base-content/40 shrink-0" />
+                    <div className="flex items-center gap-1.5 text-xs text-gray-400 font-medium">
+                        <FiUser className="text-base text-gray-500 shrink-0" />
                         <span className="truncate max-w-[110px]">{prompt.creatorName}</span>
                     </div>
 
                     {/* Action Metrics & Links */}
                     <div className="flex items-center gap-2">
                         {/* Read-Only Copy Metric Badge */}
-                        <div className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-base-content/10 dark:border-base-300 bg-base-200/60 dark:bg-neutral-800 text-base-content/80">
-                            <FiCopy className="text-sm text-base-content/40 dark:text-base-content/50" />
+                        <div className="flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-gray-700/40 bg-[#1e293b] text-gray-300">
+                            <FiCopy className="text-sm text-gray-500" />
                             <span>{prompt.copyCount || 0}</span>
                         </div>
 

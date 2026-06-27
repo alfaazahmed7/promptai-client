@@ -92,10 +92,11 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
     };
 
     return (
-        <div className="bg-base-200 p-4 rounded-xl border border-base-content/5 shadow-md flex items-center justify-between gap-4 flex-wrap">
+        /* FIXED WRAPPER: Changed bg-base-200 to bg-[#161f30] and locked border */
+        <div className="bg-[#161f30] p-4 rounded-xl border border-gray-700/40 shadow-md flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-6">
                 <div className="text-center sm:text-left">
-                    <span className="text-xs block text-base-content/50 uppercase tracking-wider font-bold">Total Copies</span>
+                    <span className="text-xs block text-gray-400 uppercase tracking-wider font-bold">Total Copies</span>
                     <span className="text-xl font-extrabold text-primary">{copyCount}</span>
                 </div>
             </div>
@@ -103,7 +104,7 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
             <div className="flex items-center gap-2">
                 <button
                     onClick={handleBookmark}
-                    className={`btn btn-sm sm:btn-md gap-2 rounded-xl transition-all duration-200 ${isBookmarked ? 'btn-primary' : 'btn-outline'}`}
+                    className={`btn btn-sm sm:btn-md gap-2 rounded-xl transition-all duration-200 ${isBookmarked ? 'btn-primary' : 'btn-outline text-white border-gray-600 hover:bg-gray-800'}`}
                 >
                     <FiBookmark className={isBookmarked ? 'fill-current' : ''} />
                     <span className="hidden sm:inline">{isBookmarked ? 'Bookmarked' : 'Bookmark'}</span>
@@ -120,7 +121,8 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
 
             {isReporting && (
                 <div className="modal modal-open backdrop-blur-sm z-50">
-                    <div className="modal-box bg-base-200 border border-base-content/10 rounded-2xl max-w-md text-base-content">
+                    {/* FIXED MODAL BOX: Swapped bg-base-200 for bg-[#161f30] and stabilized content color bindings */}
+                    <div className="modal-box bg-[#161f30] border border-gray-700/50 rounded-2xl max-w-md text-white">
                         <h3 className="font-extrabold text-lg flex items-center gap-2 text-error">
                             <FiAlertTriangle /> Report Prompt
                         </h3>
@@ -128,31 +130,33 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
                         <form onSubmit={handleReportSubmit} className="space-y-4 mt-4">
                             {/* Reason Selection */}
                             <div className="form-control">
-                                <label className="label font-semibold text-sm pb-1">Reason for flag</label>
+                                <label className="label font-semibold text-sm pb-1 text-gray-300">Reason for flag</label>
                                 <select
                                     value={reportReason}
                                     onChange={(e) => setReportReason(e.target.value)}
-                                    className="select select-bordered w-full rounded-xl bg-base-100 text-base-content"
+                                    /* FIXED DROP DOWN COLOR: Changed bg-base-100 to bg-[#1a2333] */
+                                    className="select select-bordered w-full rounded-xl bg-[#1a2333] border-gray-700 text-white outline-none focus:border-error"
                                     required
                                 >
-                                    <option value="">Select a critical reason</option>
-                                    <option value="Spam">Spam or Link Manipulation</option>
-                                    <option value="Inappropriate Content">Inappropriate Content</option>
-                                    <option value="Copyright Violation">Copyright or Intellectual property theft</option>
+                                    <option value="" className="bg-[#1a2333] text-gray-400">Select a critical reason</option>
+                                    <option value="Spam" className="bg-[#1a2333] text-white">Spam or Link Manipulation</option>
+                                    <option value="Inappropriate Content" className="bg-[#1a2333] text-white">Inappropriate Content</option>
+                                    <option value="Copyright Violation" className="bg-[#1a2333] text-white">Copyright or Intellectual property theft</option>
                                 </select>
                             </div>
 
                             {/* Optional Description Field */}
                             <div className="form-control">
-                                <label className="label font-semibold text-sm pb-1">
+                                <label className="label font-semibold text-sm pb-1 text-gray-300">
                                     <span>Additional Description</span>
-                                    <span className="text-xs text-base-content/40 font-normal">Optional</span>
+                                    <span className="text-xs text-gray-500 font-normal">Optional</span>
                                 </label>
                                 <textarea
                                     value={reportDescription}
                                     onChange={(e) => setReportDescription(e.target.value)}
                                     placeholder="Provide details about why this prompt violates guidelines..."
-                                    className="textarea textarea-bordered w-full rounded-xl bg-base-100 min-h-[100px] text-base-content leading-relaxed"
+                                    /* FIXED TEXTAREA COLOR: Changed bg-base-100 to bg-[#1a2333] */
+                                    className="textarea textarea-bordered w-full rounded-xl bg-[#1a2333] border-gray-700 min-h-[100px] text-white leading-relaxed placeholder-gray-500 outline-none focus:border-error"
                                     maxLength={500}
                                 />
                             </div>
@@ -166,7 +170,7 @@ const InteractionBar = ({ promptId, initialBookmarked, initialCopyCount, isLocke
                                         setReportReason('');
                                         setReportDescription('');
                                     }}
-                                    className="btn btn-ghost rounded-xl"
+                                    className="btn btn-ghost text-gray-400 hover:bg-gray-800 rounded-xl"
                                 >
                                     Cancel
                                 </button>
