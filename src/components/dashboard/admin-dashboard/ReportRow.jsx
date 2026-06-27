@@ -1,7 +1,7 @@
 // src/components/dashboard/admin-dashboard/ReportRow.jsx
 'use client';
 
-import { dismissReport, warnReportedPrompt } from '@/lib/actions/report';
+import { deleteReport, dismissReport, warnReportedPrompt } from '@/lib/actions/report';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -280,7 +280,6 @@ const ReportRow = ({ report, view }) => {
 
     const handleWarnCreator = async () => {
         const res = await warnReportedPrompt(report._id || report.id, report.promptId);
-        console.log(res, 'res');
         if (res.success) {
             router.refresh();
             toast.success(`Warning issued successfully`);
@@ -289,8 +288,13 @@ const ReportRow = ({ report, view }) => {
         closeModal();
     };
 
-    const handleDeletePrompt = () => {
-        console.log(`Target Prompt ID "${report.promptId?.$oid}" Delete trigger logic.`);
+    const handleDeletePrompt = async () => {
+        const res = await deleteReport(report._id || report.id);
+        if (res.deletedCount > 0) {
+            router.refresh();
+            toast.success('Reported prompt deletaded successfully');
+        }
+
         closeModal();
     };
 

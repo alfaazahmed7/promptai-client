@@ -28,3 +28,11 @@ export const warnReportedPrompt = async (reportId, promptId) => {
 
     return res.json();
 }
+
+export const deleteReport = async (reportId) => {
+    const res = await fetch(`${baseUrl}/api/delete-report/${reportId}`, {
+        method: "DELETE"
+    });
+
+    return res.json();
+}
