@@ -1,7 +1,7 @@
 // src/components/dashboard/admin-dashboard/ReportRow.jsx
 'use client';
 
-import { dismissReport } from '@/lib/actions/report';
+import { dismissReport, warnReportedPrompt } from '@/lib/actions/report';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -109,39 +109,96 @@ const DismissReportModal = ({ isOpen, onClose, onConfirm, adminReportFeedback })
     );
 };
 
-// ==========================================
 // 2. WARN CREATOR MODAL
-// ==========================================
-const WarnCreatorModal = ({ isOpen, onClose, onConfirm }) => {
+const WarnCreatorModal = ({
+    isOpen,
+    onClose,
+    onConfirm,
+    adminReportFeedback
+}) => {
     if (!isOpen) return null;
+
+    const isWarned = adminReportFeedback === "warning";
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm text-left">
             <div className="bg-[#111827] border border-slate-800 w-full max-w-md rounded-xl p-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
-                <button onClick={onClose} className="absolute top-4 right-4 text-slate-500 hover:text-slate-300 transition-colors">
-                    <FiX className="w-5 h-5" />
-                </button>
 
-                <div className="flex items-center space-x-3 mb-4">
-                    <div className="p-2 bg-slate-800 border border-slate-700/60 rounded-lg">
-                        <FiBell className="text-xl text-amber-400" />
-                    </div>
-                    <h3 className="text-lg font-semibold text-white">Issue Warning Notification</h3>
-                </div>
+                {isWarned ? (
+                    <>
+                        <div className="flex items-center space-x-3 mb-4">
+                            <div className="p-2 bg-slate-500/10 rounded-lg border border-slate-500/20">
+                                <FiBell className="text-xl text-slate-400" />
+                            </div>
 
-                <div className="space-y-4">
-                    <p className="text-xs text-slate-400 line-clamp-4">
-                        This will register an internal system infraction check to the user is portal account indicating policy violations on their prompt content.
-                    </p>
-                    <div className="flex space-x-3 justify-end text-sm font-medium pt-2">
-                        <button onClick={onClose} className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 transition-colors cursor-pointer">
-                            Cancel
+                            <h3 className="text-lg font-semibold text-white">
+                                Warning Already Issued
+                            </h3>
+                        </div>
+
+                        <p className="text-sm text-slate-300">
+                            A warning has already been issued for this reported prompt.
+                        </p>
+
+                        <p className="text-xs text-slate-500 mt-2">
+                            No further warning action is required.
+                        </p>
+
+                        <div className="flex justify-end mt-6">
+                            <button
+                                onClick={onClose}
+                                className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 transition-colors cursor-pointer"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <button
+                            onClick={onClose}
+                            className="absolute top-4 right-4 text-slate-500 hover:text-slate-300 transition-colors cursor-pointer"
+                        >
+                            <FiX className="w-5 h-5" />
                         </button>
-                        <button onClick={onConfirm} className="px-4 py-2 text-white rounded-lg transition-all shadow-lg cursor-pointer bg-amber-600 hover:bg-amber-500 shadow-amber-600/20">
-                            Confirm
-                        </button>
-                    </div>
-                </div>
+
+                        <div className="flex items-center space-x-3 mb-4">
+                            <div className="p-2 bg-amber-500/10 rounded-lg border border-amber-500/20">
+                                <FiBell className="text-xl text-amber-400" />
+                            </div>
+
+                            <h3 className="text-lg font-semibold text-white">
+                                Issue Warning Notification
+                            </h3>
+                        </div>
+
+                        <div className="space-y-4">
+                            <p className="text-xs text-slate-400">
+                                This will register an internal system infraction
+                                against the creator account and notify them about
+                                policy violations associated with their prompt
+                                content.
+                            </p>
+
+                            <div className="flex space-x-3 justify-end text-sm font-medium pt-2">
+                                <button
+                                    onClick={onClose}
+                                    className="px-4 py-2 bg-slate-800 text-slate-300 rounded-lg hover:bg-slate-700 transition-colors cursor-pointer"
+                                >
+                                    Cancel
+                                </button>
+
+                                <button
+                                    onClick={onConfirm}
+                                    className="px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-500 shadow-lg shadow-amber-600/20 transition-all cursor-pointer"
+                                >
+                                    Confirm Warning
+                                </button>
+                            </div>
+                        </div>
+                    </>
+                )}
+
             </div>
         </div>
     );
@@ -214,7 +271,6 @@ const ReportRow = ({ report, view }) => {
     // --- BACKEND HANDLERS ---
     const handleDismissReport = async () => {
         const res = await dismissReport(report._id || report.id, report.promptId);
-        console.log(res, 'res');
         if (res.success) {
             router.refresh();
             toast.success(`Report dismissed successfully`);
@@ -222,8 +278,14 @@ const ReportRow = ({ report, view }) => {
         closeModal();
     };
 
-    const handleWarnCreator = () => {
-        console.log(`Creator Warning pipeline triggered via Report ID "${report._id?.$oid}".`);
+    const handleWarnCreator = async () => {
+        const res = await warnReportedPrompt(report._id || report.id, report.promptId);
+        console.log(res, 'res');
+        if (res.success) {
+            router.refresh();
+            toast.success(`Warning issued successfully`);
+        }
+
         closeModal();
     };
 
@@ -239,7 +301,9 @@ const ReportRow = ({ report, view }) => {
                 <FiCheck className={report.adminReportFeedback === "dismiss" ? "text-green-600 w-4 h-4" : "w-4 h-4"} />
             </button>
             <button onClick={() => openModal('warn')} title="Warn Creator Account" className="p-2 text-slate-400 hover:text-amber-400 hover:bg-amber-500/10 rounded-lg transition-all cursor-pointer">
-                <FiBell className="w-4 h-4" />
+                <FiBell className={report.adminReportFeedback === "warning" ?
+                    'text-amber-400 w-4 h-4' : "w-4 h-4"
+                } />
             </button>
             <button onClick={() => openModal('delete')} title="Delete Reported Prompt" className="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-all cursor-pointer">
                 <FiTrash2 className="w-4 h-4" />
@@ -304,6 +368,7 @@ const ReportRow = ({ report, view }) => {
                         isOpen={modalState.isOpen && modalState.type === 'warn'}
                         onClose={closeModal}
                         onConfirm={handleWarnCreator}
+                        adminReportFeedback={report.adminReportFeedback}
                     />
                     <DeletePromptModal
                         isOpen={modalState.isOpen && modalState.type === 'delete'}
@@ -367,6 +432,7 @@ const ReportRow = ({ report, view }) => {
                 isOpen={modalState.isOpen && modalState.type === 'warn'}
                 onClose={closeModal}
                 onConfirm={handleWarnCreator}
+                adminReportFeedback={report.adminReportFeedback}
             />
             <DeletePromptModal
                 isOpen={modalState.isOpen && modalState.type === 'delete'}
