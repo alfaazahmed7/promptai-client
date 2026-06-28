@@ -7,6 +7,7 @@ import SavedPromptsList from '@/components/dashboard/user-dashboard/SavedPrompts
 const SavedPromptsPage = async () => {
     const user = await getUserSession();
     const bookmarks = await getBookmarkByEmail(user?.email) || [];
+    console.log(bookmarks, 'bookamrks');
 
     // Run parallel server tasks
     const mappedPrompts = await Promise.all(

@@ -49,7 +49,7 @@ const AddPromptPage = () => {
         fullDescription: '',
         promptContent: '',
         usageInstructions: '',
-        tags: '',
+        tags: [''],
         difficulty: 'Beginner',
         visibility: 'Public',
         tier: 'free'
@@ -62,7 +62,14 @@ const AddPromptPage = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+
+        setFormData(prev => ({
+            ...prev,
+            [name]:
+                name === "tags"
+                    ? value.split(",").map(tag => tag.trim()).filter(Boolean)
+                    : value
+        }));
     };
 
     const handleImageChange = (e) => {
@@ -377,7 +384,7 @@ const AddPromptPage = () => {
                                 type="text"
                                 name="tags"
                                 required
-                                value={formData.tags}
+                                value={formData.tags.join(", ")}
                                 onChange={handleChange}
                                 placeholder="e.g., SEO, Blog, AI writing"
                                 className="w-full bg-[#0b0f19] border border-slate-800/80 rounded-lg text-slate-100 placeholder-slate-700 focus:border-teal-500/60 focus:outline-none px-3.5 h-10 text-xs transition-all"

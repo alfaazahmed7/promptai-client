@@ -24,7 +24,7 @@ const PromptDetailsPage = async ({ params }) => {
 
     // Safety logic logic check
     const isPremiumTier = prompt.tier === 'premium';
-    const hasPremiumAccess = user?.plan === 'pro';
+    const hasPremiumAccess = user?.plan === 'premium';
     const isLocked = isPremiumTier && !hasPremiumAccess;
 
     const bookmark = await getBookmarkByIdAndEmail(promptId, user?.email);
